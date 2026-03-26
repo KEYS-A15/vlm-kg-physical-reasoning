@@ -1,0 +1,36 @@
+[project]
+name = "vlm-kg-physical-reasoning"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "shrey.gajjar", email = "shreydotgajjar@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "networkx>=3.6.1",
+    "pandas>=3.0.1",
+    "pillow>=12.1.1",
+    "pydantic>=2.12.5",
+    "requests>=2.32.5",
+    "rich>=14.3.3",
+    "sentence-transformers>=5.3.0",
+    "torch>=2.11.0",
+    "transformers>=5.3.0",
+    "typer>=0.24.1",
+]
+
+[project.scripts]
+vlm-kg-physical-reasoning = "vlm_kg_physical_reasoning:main"
+
+[build-system]
+requires = ["uv_build>=0.9.29,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pre-commit>=4.5.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.7",
+]
