@@ -1,0 +1,38 @@
+[
+  {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c1.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  },
+    {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c2.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  },
+    {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c3.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  },
+    {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c4.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  },
+    {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c5.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  },
+    {
+    "sample_id": "demo_001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c6.jpg",
+    "question": "Where is the cup relative to the books?",
+    "gold_answer": "behind the books"
+  }
+]

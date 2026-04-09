@@ -1,108 +1,53 @@
 # RKG-VLM
 ### Retrieval-Enhanced Knowledge Graph Reasoning for Vision-Language Models
-#### Improving VLM Physical World Reasoning via Knowledge Graphs
 
-## Project Question
-Alright, so this is the starting point for our 1-month project.<br>
+Minimal class-project pipeline for improving VLM physical-world reasoning with compact ConceptNet evidence.
 
-><i>Can we improve VLM physical-world reasoning by giving it better, cleaner, and more relevant knowledge graph evidence?</i>
+## Current Phase
+- Baseline VLM inference is implemented with a real Qwen2.5-VL wrapper.
+- Naive KG augmentation is implemented with:
+  - VLM-based entity extraction
+  - simple ConceptNet node mapping
+  - 1-hop ConceptNet retrieval
+  - naive top-k evidence selection
+  - JSON prediction and trace outputs
 
-## What we're actually building
-
-Firstly, we are **not reporducing the full VaLiK pipeline as baseline** instead:
-
-- We use VaLiK as a **conceptual reference** for how a KG-augmented VLM pipeline can be structured
-- We implement a **minimal version of that idea**, only including components relevant to our project
-
-### High level Flow
-```
-Image + Question
-        ↓
-Entity Extraction
-        ↓
-Question Type Detection
-        ↓
-KG Node Mapping
-        ↓
-Candidate Retrieval (ConceptNet)
-        ↓
-Filtering (KG Quality)
-        ↓
-Reranking (Retrieval Quality)
-        ↓
-Top-K Evidence
-        ↓
-VLM (Qwen2.5-VL)
-        ↓
-Answer + Trace
+## Setup
+```bash
+uv sync
 ```
 
-## Core focus
+## Commands
+Run the direct baseline:
 
-### ***1. Retrieval Quality***
-This is where we would spend the most efforts, to acheive this we must 
-- make the retrieval **Question-Aware**
-- select **relevant triples**
-- avoid noise in data
-- keep the **evidence and citations small and usefull** 
-### ***2. KG Evidence Quality***
-Ideally wo aren't building a new KG as our pipeline is already inspired from VaLiK, we only focus on:
-- which relations we allow
-- removing weak/generic edges
-- keeping physically meaningful triples
-### ***3. Interpretation***
-So to be able to showcase some efforts in interpretability of the improved VLM we can provide a **support trace** like *entities*, *mapped nodes*, *retrived triples* and *final evidence*
+```bash
+uv run vlm-kg-physical-reasoning run-baseline --config configs/default.yaml --sample-file path/to/sample.json
+```
 
-## Rough Plan
-For the project plan, I thought of keeping it initially defined into modular phases, we can update it to be more concurrent if need be to work on multiple parts simultaneously
-<details>
-<summary>Click to view the plan</summary>
+Run the naive KG pipeline:
 
-## Phase 1 - Setup
+```bash
+uv run vlm-kg-physical-reasoning run-kg-naive --config configs/default.yaml --sample-file path/to/sample.json
+```
 
-- [x] Basic repo scaffold
-- [x] runnable demo pipeline
-- [x] initial cli & config
-- [ ] Dataset selection 
+Use a smaller checkpoint if needed:
 
-## Phase 2 - baseline & Naive KG
+```bash
+uv run vlm-kg-physical-reasoning run-kg-naive --config configs/default.yaml --sample-file path/to/sample.json --model-name Qwen/Qwen2.5-VL-3B-Instruct
+```
 
-- [ ] Integrate ***Qwen2.5-VL***
-- [ ] Simple Entity Extraction (NER)
-- [ ] Basic ConceptNet retrieval
+## Sample File Format
+The sample file can contain a single object, a list, or `{"samples": [...]}`:
 
-## Phase 3 - Retrieval improvement
+```json
+{
+  "sample_id": "sample-001",
+  "image_path": "path/to/image.jpg",
+  "question": "What happens if the cup is near the edge of the table?"
+}
+```
 
-- [ ] Question classification
-- [ ] Relation-aware filtering
-- [ ] reranking
-- [ ] top-k selection tuning 
-
-## Phase 4 - KG Quality Filtering
-
-- [ ] Remove weak edges
-- [ ] restrict relations
-- [ ] cleaner subgraphs 
-
-## Phase 5 - Evaluation & Analysis
-
-- [ ] Compare VLM only, Naive KG, Improved Retrieval
-- [ ] Error Analysis
-- [ ] Ablation
-
-##### Further ahead we can go for Interpretability picking up the trace evidecnes from the graphs and using a small local LLM for cleaner demo of explanation.
-
-</details>
-
-## Stacks
-
-- **Storage:** JSON initially, SQLite or Neo4j if we need graph traversal
-- **Project management:** Python module => ***uv***
-- **pipeline management:** Huggingface Transformers
-- **VLM baseline model:** Qwen2.5-VL
-- **Retrieval:** ConceptNet API
-- **Storage:** Initially JSON, then we'll figure it out
-
-## Usage
-`uv sync` for the automatic venv setup\
-`uv run <commands> <subcommand>` for running the file
+## Notes
+- This phase keeps retrieval intentionally naive.
+- ConceptNet failures are non-fatal and are recorded in the trace output.
+- The next phase can build on this structure for question-aware retrieval, relation filtering, and reranking.
