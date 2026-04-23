@@ -12,7 +12,7 @@ from vlm_kg_physical_reasoning.models.qwen_vl import QwenVLModel
 from vlm_kg_physical_reasoning.pipelines.baseline import BaselinePipeline
 from vlm_kg_physical_reasoning.pipelines.kg_naive import NaiveKGPipeline
 from vlm_kg_physical_reasoning.retrieval.basic_retriever import BasicRetriever
-from vlm_kg_physical_reasoning.retrieval.conceptnet_client import ConceptNetClient
+from vlm_kg_physical_reasoning.retrieval.conceptnet_client import make_conceptnet_client
 from vlm_kg_physical_reasoning.retrieval.node_mapper import NodeMapper
 from vlm_kg_physical_reasoning.retrieval.question_classifier import QuestionClassifier
 from vlm_kg_physical_reasoning.tracing.trace_builder import TraceBuilder
@@ -98,10 +98,11 @@ def run_kg_naive(
     config = load_config(config_path)
     sample = _load_sample(config=config, sample_file=sample_file, sample_id=sample_id)
     vlm = _build_vlm(config, model_name)
-    conceptnet_client = ConceptNetClient(
+    conceptnet_client = make_conceptnet_client(
         base_url=config.retrieval.conceptnet.base_url,
         timeout_seconds=config.retrieval.conceptnet.timeout_seconds,
         language=config.retrieval.conceptnet.language,
+        gradio_space_url=config.retrieval.conceptnet.gradio_space_url,
     )
     retriever = BasicRetriever(
         client=conceptnet_client,
