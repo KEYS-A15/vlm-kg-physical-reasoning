@@ -8,6 +8,7 @@ from typing import Any
 from PIL import Image
 import torch
 from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+import torch.nn.functional as F
 
 from vlm_kg_physical_reasoning.models.vlm_spine import VLMBackbone
 
@@ -93,6 +94,40 @@ class QwenVLModel(VLMBackbone):
             return entities
 
         return self._fallback_entities(question=question, max_entities=max_entities)
+
+    # osteofelidae: DEPRECIATED: get embeddings for cosine similarity
+    def get_embedding(
+        self,
+        text: str,
+        layer: int = -10,  # TODO NEEDS TUNING
+    ) -> torch.Tensor:
+
+        # Load proc + model if not
+        processor = self._load_processor()
+        model = self._load_model()
+
+        # Calculate inputs
+        inputs = self._processor(
+            text=[text],
+            return_tensors="pt",
+        )
+        target_device = next(model.parameters()).device
+        inputs = inputs.to(target_device)
+
+        # Generate outputs
+        with torch.no_grad():
+            outputs = self._model(
+            **inputs,
+            output_hidden_states=True,
+        )
+
+        # Extract embedding-like vector (WARNING: JANK)
+        hidden = outputs.hidden_states[layer]
+
+        mask = inputs["attention_mask"].unsqueeze(-1).float()
+        embedding = (hidden * mask).sum(dim=1) / mask.sum(dim=1)
+
+        return F.normalize(embedding.squeeze(0), dim=-1)
 
     def _generate(self, image_path: str, prompt: str, max_new_tokens: int) -> str:
         processor = self._load_processor()

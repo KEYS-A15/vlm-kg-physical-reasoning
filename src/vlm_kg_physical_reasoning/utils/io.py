@@ -17,3 +17,12 @@ def write_json(path: str | Path, payload: dict[str, Any]) -> None:
 
     with output_path.open("w", encoding="utf-8") as file:
         json.dump(payload, file, indent=2, ensure_ascii=False)
+
+# osteofelidae: load json file
+def load_json(path: str | Path) -> None:
+    input_path = Path(path)
+
+    with input_path.open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+    return None
