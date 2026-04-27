@@ -131,6 +131,7 @@ def run_kg_naive(
         {
             "sample_id": sample.sample_id,
             "question": sample.question,
+            "gold_answer": sample.gold_answer,
             "question_type": trace.question_type,
             "final_answer": trace.final_answer,
             "trace_path": str(trace_path),
@@ -140,5 +141,6 @@ def run_kg_naive(
 
     typer.echo(f"Sample: {sample.sample_id}")
     typer.echo(f"Answer: {trace.final_answer}")
+    typer.echo(f"Gold answer: {sample.gold_answer}")
     typer.echo(f"Saved prediction: {prediction_path}")
     typer.echo(f"Saved trace: {trace_path}")
