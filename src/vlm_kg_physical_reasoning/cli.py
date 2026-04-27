@@ -106,6 +106,7 @@ def run_kg_naive(
     retriever = BasicRetriever(
         client=conceptnet_client,
         max_edges_per_node=config.retrieval.conceptnet.max_edges_per_node,
+        overlap_weight=config.retrieval.conceptnet.overlap_weight
     )
     pipeline = NaiveKGPipeline(
         vlm=vlm,

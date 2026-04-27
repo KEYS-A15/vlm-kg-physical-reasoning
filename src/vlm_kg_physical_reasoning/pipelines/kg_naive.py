@@ -40,7 +40,7 @@ class NaiveKGPipeline:
         retrieval_result = self.retriever.retrieve(
             mapped_nodes=mapped_nodes,
             question=sample.question,
-            top_k=self.max_evidence_triples,
+            top_k=self.max_evidence_triples
         )
 
         evidence_strings = [

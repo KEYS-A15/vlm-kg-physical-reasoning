@@ -53,6 +53,7 @@ class ConceptNetConfig(BaseModel):
     timeout_seconds: float = Field(default=10.0, gt=0.0)
     max_edges_per_node: int = Field(default=10, ge=1)
     language: str = "en"
+    overlap_weight: float = 0.5
 
 
 class RetrievalConfig(BaseModel):
