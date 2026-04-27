@@ -45,7 +45,7 @@ class QwenVLModel(VLMBackbone):
         self,
         model_name: str,
         generation_max_new_tokens: int = 96,
-        entity_extraction_max_new_tokens: int = 64,
+        entity_extraction_max_new_tokens: int = 96,
         do_sample: bool = False,
         temperature: float = 0.0,
         device_map: str | None = "auto",
@@ -78,9 +78,10 @@ class QwenVLModel(VLMBackbone):
         max_entities: int,
     ) -> list[str]:
         prompt = (
-            "Extract the most concrete physical entities relevant to answering the question. "
-            f"Return only a JSON array with at most {max_entities} short lowercase noun phrases. "
-            "Do not include attributes, relations, full sentences, or markdown.\n"
+            "Look at the image and the question. "
+            "List only the concrete physical objects visible in the image that are relevant to answering the question. "
+            f"Output a single JSON array of at most {max_entities} short noun phrases, nothing else. "
+            'Example format: ["cup", "wooden table", "shelf"]\n'
             f"Question: {question}"
         )
         raw_output = self._generate(

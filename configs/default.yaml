@@ -17,7 +17,7 @@ logging:
 model:
   name: Qwen/Qwen2.5-VL-7B-Instruct
   generation_max_new_tokens: 96
-  entity_extraction_max_new_tokens: 64
+  entity_extraction_max_new_tokens: 96
   do_sample: false
   temperature: 0.0
   device_map: auto
