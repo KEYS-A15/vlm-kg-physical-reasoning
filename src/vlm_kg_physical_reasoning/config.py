@@ -53,7 +53,9 @@ class ConceptNetConfig(BaseModel):
     timeout_seconds: float = Field(default=10.0, gt=0.0)
     max_edges_per_node: int = Field(default=10, ge=1)
     language: str = "en"
-    overlap_weight: float = 0.5
+    # If set, use this Hugging Face Gradio Space (normalized ConceptNet DB) instead
+    # of the public REST API. Example: https://cstr-conceptnet-normalized.hf.space
+    gradio_space_url: str = ""
 
 
 class RetrievalConfig(BaseModel):

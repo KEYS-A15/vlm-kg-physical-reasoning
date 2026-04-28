@@ -189,9 +189,45 @@ class ConceptNetClient:
         return fallback_uri.rstrip("/").split("/")[-1].replace("_", " ").lower()
 
 
+def make_conceptnet_client(
+    *,
+    base_url: str = "https://api.conceptnet.io",
+    timeout_seconds: float = 10.0,
+    language: str = "en",
+    max_retries: int = 2,
+    backoff_seconds: float = 0.5,
+    min_edge_weight: float = 0.0,
+    cache_enabled: bool = True,
+    gradio_space_url: str = "",
+) -> ConceptNetClientProtocol:
+    """Return the REST ``ConceptNetClient`` or a Gradio-based mirror when configured."""
+
+    if (gradio_space_url or "").strip():
+        from vlm_kg_physical_reasoning.retrieval.gradio_conceptnet_client import (
+            GradioConceptNetClient,
+        )
+
+        return GradioConceptNetClient(
+            space_url=gradio_space_url.strip(),
+            default_language=language,
+            cache_enabled=cache_enabled,
+        )
+
+    return ConceptNetClient(
+        base_url=base_url,
+        timeout_seconds=timeout_seconds,
+        language=language,
+        max_retries=max_retries,
+        backoff_seconds=backoff_seconds,
+        min_edge_weight=min_edge_weight,
+        cache_enabled=cache_enabled,
+    )
+
+
 __all__ = [
     "ConceptNetClient",
     "ConceptNetClientError",
     "ConceptNetClientProtocol",
     "ConceptNetEdge",
+    "make_conceptnet_client",
 ]

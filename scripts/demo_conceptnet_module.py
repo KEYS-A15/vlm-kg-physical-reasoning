@@ -3,9 +3,13 @@
 Usage (PowerShell):
     uv run python scripts/demo_conceptnet_module.py
     uv run python scripts/demo_conceptnet_module.py cup table "wooden table" knife
+    uv run python scripts/demo_conceptnet_module.py --official-api
 
-The script calls the real ConceptNet API at https://api.conceptnet.io and
-prints:
+By default this uses the Hugging Face Gradio mirror (see ``configs/default.yaml``
+``gradio_space_url``), not the public REST host. Pass ``--official-api`` to call
+``https://api.conceptnet.io`` only (may 502 if their gateway is down).
+
+The script fetches remote data and prints:
     1. How each entity string was normalized and mapped to URIs.
     2. Which URI actually returned edges (after candidate fallback).
     3. A table of the strongest fetched edges.
@@ -23,7 +27,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from vlm_kg_physical_reasoning.retrieval.conceptnet_client import ConceptNetClient
+from vlm_kg_physical_reasoning.config import load_config
+from vlm_kg_physical_reasoning.retrieval.conceptnet_client import make_conceptnet_client
 from vlm_kg_physical_reasoning.retrieval.conceptnet_module import ConceptNetEntityModule
 from vlm_kg_physical_reasoning.retrieval.node_mapper import NodeMapper
 
@@ -33,11 +38,18 @@ TOP_EDGES_TO_SHOW = 10
 
 def main() -> int:
     console = Console()
-    entities = sys.argv[1:] or DEFAULT_ENTITIES
+    args = [a for a in sys.argv[1:] if a != ""]
+    use_official = "--official-api" in args
+    args = [a for a in args if a != "--official-api"]
+    entities = args or DEFAULT_ENTITIES
 
+    app_config = load_config("configs/default.yaml")
+    space_url = "" if use_official else app_config.retrieval.conceptnet.gradio_space_url
+
+    mode = "official REST (api.conceptnet.io)" if use_official else f"Gradio mirror ({space_url or 'n/a'})"
     console.print(
         Panel.fit(
-            f"[bold]Entities:[/bold] {entities}",
+            f"[bold]Backend:[/bold] {mode}\n[bold]Entities:[/bold] {entities}",
             title="ConceptNet entity module demo",
             border_style="cyan",
         )
@@ -56,11 +68,14 @@ def main() -> int:
     console.print(mapping_table)
 
     console.print("\n[bold]2. Fetching edges from ConceptNet ...[/bold]")
-    client = ConceptNetClient(
+    client = make_conceptnet_client(
+        base_url=app_config.retrieval.conceptnet.base_url,
         timeout_seconds=15.0,
         max_retries=2,
         backoff_seconds=0.5,
         cache_enabled=True,
+        language=app_config.retrieval.conceptnet.language,
+        gradio_space_url=space_url,
     )
     module = ConceptNetEntityModule(
         node_mapper=mapper, client=client, max_edges_per_node=20
