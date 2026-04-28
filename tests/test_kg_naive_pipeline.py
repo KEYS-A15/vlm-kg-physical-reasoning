@@ -53,7 +53,7 @@ def test_naive_kg_pipeline_wires_extraction_retrieval_and_trace() -> None:
         vlm=vlm,
         entity_extractor=EntityExtractor(vlm),
         node_mapper=NodeMapper(),
-        retriever=BasicRetriever(client=FakeConceptNetClient(), max_edges_per_node=5),
+        retriever=BasicRetriever(client=FakeConceptNetClient(), max_edges_per_node=5, overlap_weight=0.35),
         question_classifier=QuestionClassifier(),
         trace_builder=TraceBuilder(),
         max_entities=3,
