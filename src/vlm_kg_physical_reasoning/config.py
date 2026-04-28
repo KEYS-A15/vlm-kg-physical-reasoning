@@ -62,6 +62,7 @@ class RetrievalConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     mode: str = "conceptnet_naive"
+    overlap_weight: float = Field(default=0.35, ge=0.0, le=1.0)
     conceptnet: ConceptNetConfig = Field(default_factory=ConceptNetConfig)
 
 

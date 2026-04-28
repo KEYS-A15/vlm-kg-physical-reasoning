@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import re
 
 from vlm_kg_physical_reasoning.retrieval.conceptnet_client import (
-    ConceptNetClient,
     ConceptNetClientError,
+    ConceptNetClientProtocol,
     ConceptNetEdge,
 )
 
@@ -48,7 +48,7 @@ class RetrievalResult:
 class BasicRetriever:
     """Naive 1-hop retriever using ConceptNet edge weights and lexical overlap."""
 
-    def __init__(self, client: ConceptNetClient, max_edges_per_node: int, overlap_weight: float) -> None:
+    def __init__(self, client: ConceptNetClientProtocol, max_edges_per_node: int, overlap_weight: float) -> None:
         self.client = client
         self.max_edges_per_node = max_edges_per_node
         self.overlap_weight = overlap_weight

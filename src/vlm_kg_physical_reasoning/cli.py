@@ -102,12 +102,12 @@ def run_baseline(
     table.add_column("Output File", style="magenta")
 
     for sample in samples:
+        console.print(f"[blue]Running baseline for:[/blue] {sample.sample_id}")
         result = pipeline.run(sample)
         output_path = output_dir / f"{sample.sample_id}_baseline.json"
 
         payload: dict[str, Any] = result.model_dump()
         write_json(output_path, payload)
-        console.print(f"[blue]Running baseline for:[/blue] {sample.sample_id}")
 
         table.add_row(
             result.sample_id,
@@ -144,7 +144,7 @@ def run_kg_naive(
     retriever = BasicRetriever(
         client=conceptnet_client,
         max_edges_per_node=config.retrieval.conceptnet.max_edges_per_node,
-        overlap_weight=config.retrieval.conceptnet.overlap_weight
+        overlap_weight=config.retrieval.overlap_weight
     )
     pipeline = NaiveKGPipeline(
         vlm=vlm,
