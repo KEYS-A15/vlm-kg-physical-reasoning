@@ -48,9 +48,10 @@ class RetrievalResult:
 class BasicRetriever:
     """Naive 1-hop retriever using ConceptNet edge weights and lexical overlap."""
 
-    def __init__(self, client: ConceptNetClient, max_edges_per_node: int) -> None:
+    def __init__(self, client: ConceptNetClient, max_edges_per_node: int, overlap_weight: float) -> None:
         self.client = client
         self.max_edges_per_node = max_edges_per_node
+        self.overlap_weight = overlap_weight
 
     def retrieve(
         self,
@@ -102,7 +103,7 @@ class BasicRetriever:
         question_tokens = self._tokenize(question)
         edge_tokens = self._tokenize(f"{edge.subject} {edge.relation} {edge.object}")
         overlap = len(question_tokens & edge_tokens)
-        return edge.weight + (0.25 * overlap)
+        return ((1 - self.overlap_weight) * edge.weight) + (self.overlap_weight * overlap)
 
     @staticmethod
     def _tokenize(text: str) -> set[str]:

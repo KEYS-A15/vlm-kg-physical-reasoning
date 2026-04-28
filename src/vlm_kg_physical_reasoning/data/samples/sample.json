@@ -3,36 +3,42 @@
     "sample_id": "demo_001",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c1.jpg",
     "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "gold_answer": "left of the books"
   },
-    {
-    "sample_id": "demo_001",
+  {
+    "sample_id": "demo_002",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c2.jpg",
-    "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "question": "Where is the cup relative to the stacks of books?",
+    "gold_answer": "between the stacks of books"
   },
-    {
-    "sample_id": "demo_001",
+  {
+    "sample_id": "demo_003",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c3.jpg",
     "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "gold_answer": "left of the books"
   },
-    {
-    "sample_id": "demo_001",
+  {
+    "sample_id": "demo_004",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c4.jpg",
     "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "gold_answer": "On top of the books"
   },
-    {
-    "sample_id": "demo_001",
+  {
+    "sample_id": "demo_005",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c5.jpg",
-    "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "question": "Where is the cup relative to the book?",
+    "gold_answer": "left of the book"
   },
-    {
-    "sample_id": "demo_001",
+  {
+    "sample_id": "demo_006",
     "image_path": "src/vlm_kg_physical_reasoning/data/raw/c6.jpg",
-    "question": "Where is the cup relative to the books?",
-    "gold_answer": "behind the books"
+    "question": "Where is the cup relative to the book?",
+    "gold_answer": "in front of the book"
+  },
+  {
+    "sample_id": "demo_007",
+    "image_path": "src/vlm_kg_physical_reasoning/data/raw/c6.jpg",
+    "question": "Is the book open or closed? And what is the position of the book relative to the cup?",
+    "gold_answer": "opened and behind the cup"
   }
 ]
