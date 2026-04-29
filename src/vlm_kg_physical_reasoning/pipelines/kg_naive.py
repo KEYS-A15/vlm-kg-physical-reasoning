@@ -1,24 +1,29 @@
 from __future__ import annotations
-from typing import Any
+
 from vlm_kg_physical_reasoning.data.sample import Sample
 from vlm_kg_physical_reasoning.extraction.entity_extraction import EntityExtractor
 from vlm_kg_physical_reasoning.models.vlm_spine import VLMBackbone
-from vlm_kg_physical_reasoning.retrieval.basic_retriever import BasicRetriever
 from vlm_kg_physical_reasoning.retrieval.node_mapper import NodeMapper
 from vlm_kg_physical_reasoning.retrieval.question_classifier import QuestionClassifier
+from vlm_kg_physical_reasoning.retrieval.retriever_protocol import RetrieverProtocol
 from vlm_kg_physical_reasoning.tracing.trace_builder import TraceBuilder
 from vlm_kg_physical_reasoning.tracing.trace_schema import PipelineTrace
 
 
 class NaiveKGPipeline:
-    """Run the first end-to-end KG-augmented pipeline."""
+    """Run an end-to-end KG-augmented VLM pipeline.
+
+    The retriever is injected, so this pipeline can run either:
+    - BasicRetriever for naive KG
+    - QuestionAwareRetriever for improved KG retrieval
+    """
 
     def __init__(
         self,
         vlm: VLMBackbone,
         entity_extractor: EntityExtractor,
         node_mapper: NodeMapper,
-        retriever: BasicRetriever,
+        retriever: RetrieverProtocol,
         question_classifier: QuestionClassifier,
         trace_builder: TraceBuilder,
         max_entities: int,
@@ -37,27 +42,19 @@ class NaiveKGPipeline:
         question_type = self.question_classifier.classify(sample.question)
         entities = self.entity_extractor.extract(sample, max_entities=self.max_entities)
         mapped_nodes = self.node_mapper.map_entities(entities)
-        retrieve_kwargs: dict[str, Any] = {
-            "mapped_nodes": mapped_nodes,
-            "question": sample.question,
-            "top_k": self.max_evidence_triples,
-        }
 
-        if hasattr(self.retriever, "retrieve"):
-            try:
-                retrieval_result = self.retriever.retrieve(
-                    **retrieve_kwargs,
-                    question_type=question_type,
-                )
-            except TypeError:
-                retrieval_result = self.retriever.retrieve(**retrieve_kwargs)
-        else:
-            raise TypeError("Retriever must expose a retrieve(...) method.")
+        retrieval_result = self.retriever.retrieve(
+            mapped_nodes=mapped_nodes,
+            question=sample.question,
+            top_k=self.max_evidence_triples,
+            question_type=question_type,
+        )
 
         evidence_strings = [
             f"{edge.subject} {edge.relation} {edge.object}"
             for edge in retrieval_result.selected_edges
         ]
+
         final_answer = self.vlm.answer(
             image_path=sample.image_path,
             question=sample.question,
@@ -74,3 +71,4 @@ class NaiveKGPipeline:
             retrieval_errors=retrieval_result.retrieval_errors,
             final_answer=final_answer,
         )
+

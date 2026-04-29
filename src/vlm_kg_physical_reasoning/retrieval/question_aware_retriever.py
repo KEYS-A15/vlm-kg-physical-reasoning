@@ -93,15 +93,18 @@ class QuestionAwareRetriever(BasicRetriever):
         mapped_nodes: list[str],
         question: str,
         top_k: int = 5,
-        question_type: str = "physical_general",
+        question_type: str | None = None,
     ) -> RetrievalResult:
         base_result = super().retrieve(
             mapped_nodes=mapped_nodes,
             question=question,
             top_k=max(top_k * 4, top_k),
+            question_type=question_type,
         )
 
-        normalized_question_type = self._normalize_question_type(question_type)
+        normalized_question_type = self._normalize_question_type(
+            question_type or "physical_general"
+        )
 
         # For image-relative spatial questions, ConceptNet usually cannot answer
         # left/right/front/between. Returning no evidence avoids distracting the VLM.

@@ -58,6 +58,7 @@ class BasicRetriever:
         mapped_nodes: list[str],
         question: str,
         top_k: int = 5,
+        question_type: str | None = None,
     ) -> RetrievalResult:
         all_edges: list[ConceptNetEdge] = []
         errors: list[str] = []
