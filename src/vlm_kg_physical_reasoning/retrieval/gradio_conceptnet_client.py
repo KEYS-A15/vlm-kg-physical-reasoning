@@ -11,7 +11,8 @@ Space subdomain ``cstr-conceptnet-normalized``).
 """
 
 from __future__ import annotations
-
+import contextlib
+import io
 import re
 from typing import Any
 
@@ -48,7 +49,8 @@ class GradioConceptNetClient(ConceptNetClientProtocol):
         self.cache_enabled = cache_enabled
         self._cache: dict[tuple[str, int | None], list[ConceptNetEdge]] = {}
         try:
-            self._client: Any = Client(self._space_url)
+            with contextlib.redirect_stdout(io.StringIO()):
+                self._client: Any = Client(self._space_url)
         except Exception as exc:  # noqa: BLE001
             raise ConceptNetClientError(
                 f"Failed to connect to Gradio space {self._space_url}: {exc}"

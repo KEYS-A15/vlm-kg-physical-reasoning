@@ -8,6 +8,9 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 from vlm_kg_physical_reasoning.utils.io import load_json, write_json
+from vlm_kg_physical_reasoning.utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 
 question_mappings = {
@@ -71,7 +74,7 @@ class QuestionClassifier:
 
         if not self._embed_path.exists():
             if self._verbose:
-                print("Precomputing embeds...")
+                logger.info("Precomputing question-classifier embeddings at %s", self._embed_path)
 
             self._embed_path.parent.mkdir(parents=True, exist_ok=True)
             raw_embed_dict: dict[str, list[float]] = {
@@ -91,7 +94,7 @@ class QuestionClassifier:
                     raw_embed_dict[word] = [float(x) for x in vec]
 
             if self._verbose:
-                print("Loaded embeds successfully")
+                logger.info("Loaded question-classifier embeddings from %s", self._embed_path)
 
         device = model.device
         embed_cache: dict[str, torch.Tensor] = {
@@ -124,8 +127,8 @@ class QuestionClassifier:
         best_score = category_scores[best_category]
 
         if self._verbose:
-            print(category_scores)
-            print(f"Classified: {best_category}")
+            logger.debug("Question category scores: %s", category_scores)
+            logger.info("Classified question_type=%s", best_category)
 
         if best_score < self._cosine_thres:
             return "physical_general"

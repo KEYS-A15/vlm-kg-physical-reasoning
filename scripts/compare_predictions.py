@@ -13,7 +13,9 @@ from vlm_kg_physical_reasoning.eval.comparison import (
     load_system_predictions,
 )
 from vlm_kg_physical_reasoning.eval.metrics import score_system
+from vlm_kg_physical_reasoning.utils.logging import configure_logging, get_logger
 
+logger = get_logger(__name__)
 
 console = Console()
 
@@ -65,6 +67,7 @@ def _scores_to_dict(score: Any) -> dict[str, object]:
 
 
 def main() -> int:
+    configure_logging("INFO")
     args = parse_args()
     prediction_dir = Path(args.prediction_dir)
 
@@ -108,8 +111,8 @@ def main() -> int:
     comparison_table.add_column("Baseline", style="white")
     comparison_table.add_column("KG-Naive", style="magenta")
     comparison_table.add_column("Question-Aware", style="green")
-    comparison_table.add_column("Naive Evidence", style="dim")
-    comparison_table.add_column("QA Evidence", style="dim")
+    comparison_table.add_column("Naive Evidence", style="purple")
+    comparison_table.add_column("QA Evidence", style="purple")
 
     for row in comparison_rows:
         comparison_table.add_row(
@@ -133,7 +136,7 @@ def main() -> int:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(output, indent=2), encoding="utf-8")
 
-    console.print(f"[bold green]Saved comparison summary:[/bold green] {out_path}")
+    logger.info("Saved comparison summary: %s", out_path)
     return 0
 
 

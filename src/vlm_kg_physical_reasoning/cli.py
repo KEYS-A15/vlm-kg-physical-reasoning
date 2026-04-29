@@ -4,7 +4,10 @@ from pathlib import Path
 
 import typer
 from typing import Any
+import logging
+import os
 from rich.console import Console
+from rich.panel import Panel
 from rich.table import Table
 
 from vlm_kg_physical_reasoning.config import AppConfig, load_config
@@ -28,12 +31,55 @@ from vlm_kg_physical_reasoning.eval.metrics import (
     token_overlap_f1,
 )
 
-app = typer.Typer(no_args_is_help=True, help="RKG-VLM phase 2 commands.")
+app = typer.Typer(
+    no_args_is_help=True,
+    help="RKG-VLM phase 2 commands.",
+    pretty_exceptions_enable=False,
+    rich_markup_mode="rich",
+    context_settings={
+        "color": False,
+    },
+)
 console = Console()
 
 def main() -> None:
     app()
 
+def _silence_external_logs() -> None:
+    os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+    os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+
+    noisy_loggers = [
+        "",
+        "httpx",
+        "httpcore",
+        "urllib3",
+        "gradio_client",
+        "huggingface_hub",
+        "transformers",
+        "sentence_transformers",
+    ]
+
+    for logger_name in noisy_loggers:
+        noisy_logger = logging.getLogger(logger_name)
+        noisy_logger.setLevel(logging.ERROR)
+        noisy_logger.handlers.clear()
+        noisy_logger.propagate = False
+
+def _print_sample_panel(sample: Sample) -> None:
+    console.print(
+        Panel.fit(
+            f"[bold cyan]{sample.sample_id}[/bold cyan]\n"
+            f"[white]{sample.question}[/white]\n"
+            f"[yellow]Gold:[/yellow] {sample.gold_answer or '-'}",
+            title="Sample",
+            border_style="cyan",
+        )
+    )
+
+
+def _print_step(label: str, style: str) -> None:
+    console.print(f"[{style}]▣ {label}[/{style}]")
 
 def _resolve_sample_file(config: AppConfig, sample_file: Path | None) -> Path:
     if sample_file is not None:
@@ -140,15 +186,15 @@ def _run_kg_pipeline(
 
     table = Table(title=title, show_lines=True)
     table.add_column("Sample ID", style="cyan", no_wrap=True)
-    table.add_column("Type", style="blue", no_wrap=True)
+    table.add_column("Type", style="cornflower_blue", no_wrap=True)
     table.add_column("Entities", style="white")
     table.add_column("Selected Evidence", style="magenta")
     table.add_column("Gold", style="yellow")
     table.add_column("Prediction", style="green")
-    table.add_column("Trace", style="dim")
+    table.add_column("Trace", style="purple")
 
     for sample in samples:
-        console.print(f"[blue]Running {output_suffix} for:[/blue] {sample.sample_id}")
+        console.print(f"[dodger_blue1]Running {output_suffix} for:[/cornflower_blue] {sample.sample_id}")
 
         trace = pipeline.run(sample)
 
@@ -176,7 +222,7 @@ def _run_kg_pipeline(
             _edge_to_text(edge) for edge in trace.selected_evidence[:3]
         )
         if not evidence_preview:
-            evidence_preview = "[dim]No KG evidence used[/dim]"
+            evidence_preview = "[purple]No KG evidence used[/purple]"
 
         table.add_row(
             sample.sample_id,
@@ -251,7 +297,9 @@ def run_baseline(
     sample_id: str | None = typer.Option(None, "--sample-id"),
     model_name: str | None = typer.Option(None, "--model-name"),
 ) -> None:
+    _silence_external_logs()
     config = load_config(config_path)
+    
     samples = _load_samples(config=config, sample_file=sample_file)
 
     if sample_id is not None:
@@ -270,7 +318,7 @@ def run_baseline(
     table.add_column("Output File", style="magenta")
 
     for sample in samples:
-        console.print(f"[blue]Running baseline for:[/blue] {sample.sample_id}")
+        _print_step(f"Running Baseline VLM for {sample.sample_id}", "bold dodger_blue1")
         result = pipeline.run(sample)
         output_path = output_dir / f"{sample.sample_id}_baseline.json"
 
@@ -330,6 +378,8 @@ def run_kg_naive(
     model_name: str | None = typer.Option(None, "--model-name"),
 ) -> None:
     """Run the naive ConceptNet-augmented VLM pipeline."""
+    _silence_external_logs()
+    
     _run_kg_pipeline(
         config_path=config_path,
         sample_file=sample_file,
@@ -346,6 +396,8 @@ def run_kg_question_aware(
     model_name: str | None = typer.Option(None, "--model-name"),
 ) -> None:
     """Run the question-aware ConceptNet-augmented VLM pipeline."""
+    _silence_external_logs()
+    
     _run_kg_pipeline(
         config_path=config_path,
         sample_file=sample_file,
@@ -363,7 +415,9 @@ def run_all(
 ) -> None:
     """Run baseline, KG-naive, and KG-question-aware per sample with immediate comparison."""
 
+    _silence_external_logs()
     config = load_config(config_path)
+    
     samples = _load_samples(config=config, sample_file=sample_file)
 
     if sample_id is not None:
@@ -395,18 +449,18 @@ def run_all(
     summary_table.add_column("Baseline", style="white")
     summary_table.add_column("KG-Naive", style="magenta")
     summary_table.add_column("Question-Aware", style="green")
-    summary_table.add_column("Naive Evidence", style="dim")
-    summary_table.add_column("QA Evidence", style="dim")
+    summary_table.add_column("Naive Evidence", style="purple")
+    summary_table.add_column("QA Evidence", style="purple")
 
     for sample in samples:
-        console.rule(f"[bold cyan]{sample.sample_id}")
+        _print_sample_panel(sample)
 
-        console.print(f"[blue]Running baseline for:[/blue] {sample.sample_id}")
+        _print_step("Running Baseline VLM", "bold dodger_blue1")
         baseline_result = baseline_pipeline.run(sample)
         baseline_path = prediction_dir / f"{sample.sample_id}_baseline.json"
         write_json(baseline_path, baseline_result.model_dump())
 
-        console.print(f"[blue]Running kg_naive for:[/blue] {sample.sample_id}")
+        _print_step("Running KG-Naive", "bold magenta")
         naive_trace = kg_naive_pipeline.run(sample)
         naive_prediction_path = prediction_dir / f"{sample.sample_id}_kg_naive.json"
         naive_trace_path = trace_dir / f"{sample.sample_id}_kg_naive_trace.json"
@@ -427,7 +481,7 @@ def run_all(
         write_json(naive_prediction_path, naive_payload)
         write_json(naive_trace_path, naive_trace.model_dump())
 
-        console.print(f"[blue]Running kg_question_aware for:[/blue] {sample.sample_id}")
+        _print_step("Running KG Question-Aware", "bold green")
         qa_trace = kg_question_aware_pipeline.run(sample)
         qa_prediction_path = prediction_dir / f"{sample.sample_id}_kg_question_aware.json"
         qa_trace_path = trace_dir / f"{sample.sample_id}_kg_question_aware_trace.json"
