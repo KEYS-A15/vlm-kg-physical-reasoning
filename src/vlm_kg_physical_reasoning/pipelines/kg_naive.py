@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Any
 from vlm_kg_physical_reasoning.data.sample import Sample
 from vlm_kg_physical_reasoning.extraction.entity_extraction import EntityExtractor
 from vlm_kg_physical_reasoning.models.vlm_spine import VLMBackbone
@@ -37,11 +37,22 @@ class NaiveKGPipeline:
         question_type = self.question_classifier.classify(sample.question)
         entities = self.entity_extractor.extract(sample, max_entities=self.max_entities)
         mapped_nodes = self.node_mapper.map_entities(entities)
-        retrieval_result = self.retriever.retrieve(
-            mapped_nodes=mapped_nodes,
-            question=sample.question,
-            top_k=self.max_evidence_triples
-        )
+        retrieve_kwargs: dict[str, Any] = {
+            "mapped_nodes": mapped_nodes,
+            "question": sample.question,
+            "top_k": self.max_evidence_triples,
+        }
+
+        if hasattr(self.retriever, "retrieve"):
+            try:
+                retrieval_result = self.retriever.retrieve(
+                    **retrieve_kwargs,
+                    question_type=question_type,
+                )
+            except TypeError:
+                retrieval_result = self.retriever.retrieve(**retrieve_kwargs)
+        else:
+            raise TypeError("Retriever must expose a retrieve(...) method.")
 
         evidence_strings = [
             f"{edge.subject} {edge.relation} {edge.object}"

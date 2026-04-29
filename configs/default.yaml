@@ -26,9 +26,12 @@ model:
 retrieval:
   mode: conceptnet_naive
   overlap_weight: 0.35
+  relation_prior_weight: 1.0
+  suppress_spatial_kg: true
   conceptnet:
     base_url: https://api.conceptnet.io
     timeout_seconds: 10.0
     max_edges_per_node: 10
     language: en
     gradio_space_url: "https://cstr-conceptnet-normalized.hf.space"
+    

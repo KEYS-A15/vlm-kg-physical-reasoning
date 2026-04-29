@@ -63,6 +63,8 @@ class RetrievalConfig(BaseModel):
 
     mode: str = "conceptnet_naive"
     overlap_weight: float = Field(default=0.35, ge=0.0, le=1.0)
+    relation_prior_weight: float = Field(default=1.0, ge=0.0)
+    suppress_spatial_kg: bool = True
     conceptnet: ConceptNetConfig = Field(default_factory=ConceptNetConfig)
 
 

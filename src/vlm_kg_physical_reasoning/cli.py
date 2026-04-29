@@ -20,6 +20,9 @@ from vlm_kg_physical_reasoning.retrieval.node_mapper import NodeMapper
 from vlm_kg_physical_reasoning.retrieval.question_classifier import QuestionClassifier
 from vlm_kg_physical_reasoning.tracing.trace_builder import TraceBuilder
 from vlm_kg_physical_reasoning.utils.io import ensure_dir, write_json
+from vlm_kg_physical_reasoning.retrieval.question_aware_retriever import (
+    QuestionAwareRetriever,
+)
 
 
 app = typer.Typer(no_args_is_help=True, help="RKG-VLM phase 2 commands.")
@@ -75,6 +78,117 @@ def _build_vlm(config: AppConfig, model_name_override: str | None) -> QwenVLMode
         torch_dtype=config.model.torch_dtype,
     )
 
+def _run_kg_pipeline(
+    *,
+    config_path: Path,
+    sample_file: Path | None,
+    sample_id: str | None,
+    model_name: str | None,
+    use_question_aware_retrieval: bool,
+) -> None:
+    config = load_config(config_path)
+    samples = _load_samples(config=config, sample_file=sample_file)
+
+    if sample_id is not None:
+        samples = [sample for sample in samples if sample.sample_id == sample_id]
+        if not samples:
+            raise typer.BadParameter(f"No sample found with sample_id={sample_id}")
+
+    vlm = _build_vlm(config, model_name)
+    conceptnet_client = make_conceptnet_client(
+        base_url=config.retrieval.conceptnet.base_url,
+        timeout_seconds=config.retrieval.conceptnet.timeout_seconds,
+        language=config.retrieval.conceptnet.language,
+        gradio_space_url=config.retrieval.conceptnet.gradio_space_url,
+    )
+
+    if use_question_aware_retrieval:
+        retriever = QuestionAwareRetriever(
+            client=conceptnet_client,
+            max_edges_per_node=config.retrieval.conceptnet.max_edges_per_node,
+            overlap_weight=config.retrieval.overlap_weight,
+            relation_prior_weight=config.retrieval.relation_prior_weight,
+            suppress_spatial_kg=config.retrieval.suppress_spatial_kg,
+        )
+        output_suffix = "kg_question_aware"
+        title = "KG Question-Aware Pipeline Results"
+    else:
+        retriever = BasicRetriever(
+            client=conceptnet_client,
+            max_edges_per_node=config.retrieval.conceptnet.max_edges_per_node,
+            overlap_weight=config.retrieval.overlap_weight,
+        )
+        output_suffix = "kg_naive"
+        title = "KG-Naive Pipeline Results"
+
+    pipeline = NaiveKGPipeline(
+        vlm=vlm,
+        entity_extractor=EntityExtractor(vlm),
+        node_mapper=NodeMapper(),
+        retriever=retriever,
+        question_classifier=QuestionClassifier(),
+        trace_builder=TraceBuilder(),
+        max_entities=config.pipeline.max_entities,
+        max_evidence_triples=config.pipeline.max_evidence_triples,
+    )
+
+    prediction_dir = ensure_dir(config.paths.prediction_output_dir)
+    trace_dir = ensure_dir(config.paths.trace_output_dir)
+
+    table = Table(title=title, show_lines=True)
+    table.add_column("Sample ID", style="cyan", no_wrap=True)
+    table.add_column("Type", style="blue", no_wrap=True)
+    table.add_column("Entities", style="white")
+    table.add_column("Selected Evidence", style="magenta")
+    table.add_column("Gold", style="yellow")
+    table.add_column("Prediction", style="green")
+    table.add_column("Trace", style="dim")
+
+    for sample in samples:
+        console.print(f"[blue]Running {output_suffix} for:[/blue] {sample.sample_id}")
+
+        trace = pipeline.run(sample)
+
+        prediction_path = prediction_dir / f"{sample.sample_id}_{output_suffix}.json"
+        trace_path = trace_dir / f"{sample.sample_id}_{output_suffix}_trace.json"
+
+        prediction_payload: dict[str, Any] = {
+            "sample_id": sample.sample_id,
+            "question": sample.question,
+            "gold_answer": sample.gold_answer,
+            "question_type": trace.question_type,
+            "entities": trace.entities,
+            "selected_evidence": [
+                _edge_to_dict(edge) for edge in trace.selected_evidence
+            ],
+            "final_answer": trace.final_answer,
+            "trace_path": str(trace_path),
+            "retrieval_mode": output_suffix,
+        }
+
+        write_json(prediction_path, prediction_payload)
+        write_json(trace_path, trace.model_dump())
+
+        evidence_preview = "\n".join(
+            _edge_to_text(edge) for edge in trace.selected_evidence[:3]
+        )
+        if not evidence_preview:
+            evidence_preview = "[dim]No KG evidence used[/dim]"
+
+        table.add_row(
+            sample.sample_id,
+            trace.question_type,
+            ", ".join(trace.entities) if trace.entities else "-",
+            evidence_preview,
+            sample.gold_answer or "-",
+            trace.final_answer,
+            str(trace_path),
+        )
+
+    console.print(table)
+    console.print(
+        f"[bold green]Completed {output_suffix} run for {len(samples)} sample(s).[/bold green]"
+    )
 
 @app.command("run-baseline")
 def run_baseline(
@@ -156,113 +270,32 @@ def _edge_to_text(edge: Any) -> str:
 
 @app.command("run-kg-naive")
 def run_kg_naive(
-    config_path: Path = typer.Option(
-        "configs/default.yaml",
-        "--config",
-        help="Path to the YAML config.",
-    ),
-    sample_file: Path | None = typer.Option(
-        None,
-        "--sample-file",
-        help="Path to a sample JSON file.",
-    ),
-    sample_id: str | None = typer.Option(
-        None,
-        "--sample-id",
-        help="Optional sample id to select from a file.",
-    ),
-    model_name: str | None = typer.Option(
-        None,
-        "--model-name",
-        help="Optional model override.",
-    ),
+    config_path: Path = typer.Option("configs/default.yaml", "--config"),
+    sample_file: Path | None = typer.Option(None, "--sample-file"),
+    sample_id: str | None = typer.Option(None, "--sample-id"),
+    model_name: str | None = typer.Option(None, "--model-name"),
 ) -> None:
     """Run the naive ConceptNet-augmented VLM pipeline."""
-
-    config = load_config(config_path)
-    samples = _load_samples(config=config, sample_file=sample_file)
-
-    if sample_id is not None:
-        samples = [sample for sample in samples if sample.sample_id == sample_id]
-        if not samples:
-            raise typer.BadParameter(f"No sample found with sample_id={sample_id}")
-
-    vlm = _build_vlm(config, model_name)
-    conceptnet_client = make_conceptnet_client(
-        base_url=config.retrieval.conceptnet.base_url,
-        timeout_seconds=config.retrieval.conceptnet.timeout_seconds,
-        language=config.retrieval.conceptnet.language,
-        gradio_space_url=config.retrieval.conceptnet.gradio_space_url,
-    )
-    retriever = BasicRetriever(
-        client=conceptnet_client,
-        max_edges_per_node=config.retrieval.conceptnet.max_edges_per_node,
-        overlap_weight=config.retrieval.overlap_weight,
+    _run_kg_pipeline(
+        config_path=config_path,
+        sample_file=sample_file,
+        sample_id=sample_id,
+        model_name=model_name,
+        use_question_aware_retrieval=False,
     )
 
-    pipeline = NaiveKGPipeline(
-        vlm=vlm,
-        entity_extractor=EntityExtractor(vlm),
-        node_mapper=NodeMapper(),
-        retriever=retriever,
-        question_classifier=QuestionClassifier(),
-        trace_builder=TraceBuilder(),
-        max_entities=config.pipeline.max_entities,
-        max_evidence_triples=config.pipeline.max_evidence_triples,
+@app.command("run-kg-question-aware")
+def run_kg_question_aware(
+    config_path: Path = typer.Option("configs/default.yaml", "--config"),
+    sample_file: Path | None = typer.Option(None, "--sample-file"),
+    sample_id: str | None = typer.Option(None, "--sample-id"),
+    model_name: str | None = typer.Option(None, "--model-name"),
+) -> None:
+    """Run the question-aware ConceptNet-augmented VLM pipeline."""
+    _run_kg_pipeline(
+        config_path=config_path,
+        sample_file=sample_file,
+        sample_id=sample_id,
+        model_name=model_name,
+        use_question_aware_retrieval=True,
     )
-
-    prediction_dir = ensure_dir(config.paths.prediction_output_dir)
-    trace_dir = ensure_dir(config.paths.trace_output_dir)
-
-    table = Table(title="KG-Naive Pipeline Results", show_lines=True)
-    table.add_column("Sample ID", style="cyan", no_wrap=True)
-    table.add_column("Type", style="blue", no_wrap=True)
-    table.add_column("Entities", style="white")
-    table.add_column("Selected Evidence", style="magenta")
-    table.add_column("Gold", style="yellow")
-    table.add_column("Prediction", style="green")
-    table.add_column("Trace", style="dim")
-
-    for sample in samples:
-        console.print(f"[blue]Running KG-naive for:[/blue] {sample.sample_id}")
-
-        trace = pipeline.run(sample)
-
-        prediction_path = prediction_dir / f"{sample.sample_id}_kg_naive.json"
-        trace_path = trace_dir / f"{sample.sample_id}_kg_naive_trace.json"
-
-        prediction_payload: dict[str, Any] = {
-            "sample_id": sample.sample_id,
-            "question": sample.question,
-            "gold_answer": sample.gold_answer,
-            "question_type": trace.question_type,
-            "entities": trace.entities,
-            "selected_evidence": [_edge_to_dict(edge) for edge in trace.selected_evidence],
-            "final_answer": trace.final_answer,
-            "trace_path": str(trace_path),
-        }
-
-        write_json(prediction_path, prediction_payload)
-        write_json(trace_path, trace.model_dump())
-
-        evidence_preview = "\n".join(
-            _edge_to_text(edge) for edge in trace.selected_evidence[:3]
-        )
-        if not evidence_preview:
-            evidence_preview = "-"
-
-        table.add_row(
-            sample.sample_id,
-            trace.question_type,
-            ", ".join(trace.entities) if trace.entities else "-",
-            evidence_preview,
-            sample.gold_answer or "-",
-            trace.final_answer,
-            str(trace_path),
-        )
-
-    console.print(table)
-    console.print(
-        f"[bold green]Completed KG-naive run for {len(samples)} sample(s).[/bold green]"
-    )
-
