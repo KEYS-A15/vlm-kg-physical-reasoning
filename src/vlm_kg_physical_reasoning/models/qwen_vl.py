@@ -36,6 +36,32 @@ _FALLBACK_STOPWORDS = {
     "which",
     "with",
     "would",
+        "any",
+    "are",
+    "as",
+    "be",
+    "become",
+    "called",
+    "call",
+    "center",
+    "centre",
+    "either",
+    "get",
+    "grow",
+    "kind",
+    "like",
+    "made",
+    "near",
+    "one",
+    "or",
+    "piece",
+    "place",
+    "sort",
+    "that",
+    "these",
+    "thing",
+    "type",
+    "unit",
 }
 
 
@@ -213,18 +239,26 @@ class QwenVLModel(VLMBackbone):
 
     @staticmethod
     def _build_answer_prompt(question: str, evidence: list[str]) -> str:
+        answer_instruction = (
+            "Answer with only the final short answer, preferably 1 to 3 words. "
+            "If the answer is yes/no, answer only yes or no. "
+            "Do not explain. Do not cite evidence.\n"
+        )
+
         if not evidence:
             return (
-                "Answer the question about the image as clearly and briefly as possible.\n"
+                f"{answer_instruction}"
+                "Answer the question about the image.\n"
                 f"Question: {question}"
             )
 
         evidence_block = "\n".join(f"- {item}" for item in evidence)
         return (
-            "Use the image and the compact knowledge graph evidence below to answer the question. "
-            "If the evidence is noisy, prefer the image.\n"
+            f"{answer_instruction}"
+            "Use the image and the knowledge graph facts below if they are relevant. "
+            "Ignore facts that are unrelated or noisy.\n"
             f"Question: {question}\n"
-            "Evidence:\n"
+            "Knowledge graph facts:\n"
             f"{evidence_block}"
         )
 
@@ -260,8 +294,30 @@ class QwenVLModel(VLMBackbone):
     def _fallback_entities(self, question: str, max_entities: int) -> list[str]:
         candidates: list[str] = []
         seen: set[str] = set()
+        q = question.lower()
 
-        for token in _TOKEN_PATTERN.findall(question.lower()):
+        phrase_patterns = [
+            r"\bcoffee table\b",
+            r"\bremote control\b",
+            r"\bkitchen island\b",
+            r"\btraffic light\b",
+            r"\bfire hydrant\b",
+            r"\btennis racket\b",
+            r"\bsurfboard\b",
+            r"\bdining table\b",
+        ]
+
+        for pattern in phrase_patterns:
+            match = re.search(pattern, q)
+            if match:
+                phrase = self._normalize_entity(match.group(0))
+                if phrase and phrase not in seen:
+                    seen.add(phrase)
+                    candidates.append(phrase)
+                    if len(candidates) >= max_entities:
+                        return candidates
+
+        for token in _TOKEN_PATTERN.findall(q):
             if token in _FALLBACK_STOPWORDS or len(token) < 3:
                 continue
             normalized = self._normalize_entity(token)
@@ -272,7 +328,7 @@ class QwenVLModel(VLMBackbone):
             if len(candidates) >= max_entities:
                 break
 
-        return candidates or ["object"]
+        return candidates
 
     @staticmethod
     def _normalize_entity(value: str) -> str:
