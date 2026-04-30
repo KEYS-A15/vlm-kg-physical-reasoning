@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "datasets>=4.8.5",
     "gradio-client>=2.5.0",
     "networkx>=3.6.1",
     "pandas>=3.0.1",

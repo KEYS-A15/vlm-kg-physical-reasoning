@@ -13,3 +13,5 @@ wheels/
 # Folders
 outputs/*
 !outputs/.gitkeep
+data/gqa/
+data/okvqa/
