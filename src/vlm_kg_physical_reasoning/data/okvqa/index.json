@@ -1,0 +1,602 @@
+[
+  {
+    "sample_id": "sample_0001",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5174545.jpg",
+    "question": "What is most famous internet animal?",
+    "gold_answer": "cat or cat or cat or cat or cat or cat or ugly cat or ugly cat or grumpy cat or grumpy cat"
+  },
+  {
+    "sample_id": "sample_0002",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1589645.jpg",
+    "question": "In what country can you see this?",
+    "gold_answer": "vietnam or vietnam or vietnam or vietnam or thailand or thailand or egypt or egypt or spain or spain"
+  },
+  {
+    "sample_id": "sample_0003",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4078255.jpg",
+    "question": "What breed of animal is on the picture?",
+    "gold_answer": "penguin or penguin or penguin or penguin or penguin or penguin or penguin or penguin or emperor penguin or emperor penguin"
+  },
+  {
+    "sample_id": "sample_0004",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3893155.jpg",
+    "question": "What genre are these books?",
+    "gold_answer": "fiction or fiction or fiction or fiction or romance or romance or thriller or thriller or history or history"
+  },
+  {
+    "sample_id": "sample_0005",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1024005.jpg",
+    "question": "What type of disability does that vehicle's sign say it can accommodate?",
+    "gold_answer": "wheelchair or wheelchair or wheelchair or wheelchair or handicap or handicap or handicap or handicap or wheelchair disabilities or wheelchair disabilities"
+  },
+  {
+    "sample_id": "sample_0006",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4496385.jpg",
+    "question": "What is this area of a town?",
+    "gold_answer": "downtown or downtown or downtown or downtown or downtown or downtown or park or park or park or park"
+  },
+  {
+    "sample_id": "sample_0007",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2287495.jpg",
+    "question": "What is this used for?",
+    "gold_answer": "eating or eating or eating or eating or food or food or dinner or dinner or nourishment or nourishment"
+  },
+  {
+    "sample_id": "sample_0008",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4825855.jpg",
+    "question": "What are these trains used for?",
+    "gold_answer": "carry passengers or carry passengers or passengers or passengers or transportation or transportation or travel or travel or transport or transport"
+  },
+  {
+    "sample_id": "sample_0009",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1859035.jpg",
+    "question": "What is the long tall white pole for?",
+    "gold_answer": "light or light or flags or flags or utility or utility or flag or flag or light pole or light pole"
+  },
+  {
+    "sample_id": "sample_0010",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1967065.jpg",
+    "question": "How long do these animals live?",
+    "gold_answer": "50 years or 50 years or 50 years or 50 years or 15 years or 15 years or 40 years or 40 years or long time or long time"
+  },
+  {
+    "sample_id": "sample_0011",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3275655.jpg",
+    "question": "This motorcycle has what stroke engine?",
+    "gold_answer": "4 or 4 or 4 or 4 or 1 or 1 or 3 stroke or 3 stroke or 2 or 2"
+  },
+  {
+    "sample_id": "sample_0012",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4660055.jpg",
+    "question": "What is the company name for this airplane?",
+    "gold_answer": "boeing or boeing or boeing or boeing or delta or delta or us airlines or us airlines or american or american"
+  },
+  {
+    "sample_id": "sample_0013",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2559175.jpg",
+    "question": "When was this mode of transportation invented?",
+    "gold_answer": "1886 or 1886 or 1886 or 1886 or 1886 or 1886 or 1920s or 1920s or 1885 or 1885"
+  },
+  {
+    "sample_id": "sample_0014",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4200905.jpg",
+    "question": "What style saddle are the riders using?",
+    "gold_answer": "western or western or western or western or leather or leather or leather or leather or english or english"
+  },
+  {
+    "sample_id": "sample_0015",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1760785.jpg",
+    "question": "What breed is the black and white animal next to the sheep?",
+    "gold_answer": "shepherd or shepherd or shepherd or shepherd or border collie or border collie or border collie or border collie or american or american"
+  },
+  {
+    "sample_id": "sample_0016",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2834985.jpg",
+    "question": "How fast could you travel on this?",
+    "gold_answer": "very fast or very fast or very fast or very fast or fast or fast or 500 mph or 500 mph or extremely or extremely"
+  },
+  {
+    "sample_id": "sample_0017",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4169605.jpg",
+    "question": "What flavor is the cake?",
+    "gold_answer": "chocolate or chocolate or chocolate or chocolate or chocolate or chocolate or chocolate or chocolate or chocolate or chocolate"
+  },
+  {
+    "sample_id": "sample_0018",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5330395.jpg",
+    "question": "What goes in the container next to the benches?",
+    "gold_answer": "trash or trash or trash or trash or trash or trash or trash or trash or garbage or garbage"
+  },
+  {
+    "sample_id": "sample_0019",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/522325.jpg",
+    "question": "What is generally in the drawer next to the bed?",
+    "gold_answer": "bible or bible or bible or bible or makeup or makeup or gun or gun or bible and phone bookam or bible and phone bookam"
+  },
+  {
+    "sample_id": "sample_0020",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3895325.jpg",
+    "question": "What part of the building is the person standing on?",
+    "gold_answer": "roof or roof or roof or roof or roof or roof or roof or roof or roof or roof"
+  },
+  {
+    "sample_id": "sample_0021",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1639295.jpg",
+    "question": "Taking a ride on one of these may cause what kind of sickness?",
+    "gold_answer": "sea or sea or sea or sea or sea or sea or seasick or seasick or sea sickness or sea sickness"
+  },
+  {
+    "sample_id": "sample_0022",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/713845.jpg",
+    "question": "What do we call a place like this with many cars?",
+    "gold_answer": "parking lot or parking lot or parking lot or parking lot or parking lot or parking lot or parking lot or parking lot or parking llot or parking llot"
+  },
+  {
+    "sample_id": "sample_0023",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/949265.jpg",
+    "question": "What tv show is this backpack from?",
+    "gold_answer": "dora explorer or dora explorer or dora explorer or dora explorer or blues clues or blues clues or cartoon show or cartoon show or dora or dora"
+  },
+  {
+    "sample_id": "sample_0024",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/761385.jpg",
+    "question": "What vitamins does this vegetable contain?",
+    "gold_answer": "vitamin c or vitamin c or vitamin c or vitamin c or vitamin e or vitamin e or vitamin or vitamin or d or d"
+  },
+  {
+    "sample_id": "sample_0025",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3703995.jpg",
+    "question": "The vegetables shown before you is good for which parts of the body?",
+    "gold_answer": "heart or heart or heart or heart or immunte system or immunte system or digestive or digestive or total body or total body"
+  },
+  {
+    "sample_id": "sample_0026",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5105155.jpg",
+    "question": "What type of walkway is pictured?",
+    "gold_answer": "stone path or stone path or stone path or stone path or bridge or bridge or stone or stone or stonepath or stonepath"
+  },
+  {
+    "sample_id": "sample_0027",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4591415.jpg",
+    "question": "In what country would you find this hat?",
+    "gold_answer": "vietnam or vietnam or vietnam or vietnam or china or china or china or china or japan or japan"
+  },
+  {
+    "sample_id": "sample_0028",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5274975.jpg",
+    "question": "Is this a desktop or laptop computer?",
+    "gold_answer": "desktop or desktop or desktop or desktop or desktop or desktop or desktop or desktop or desktop or desktop"
+  },
+  {
+    "sample_id": "sample_0029",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5039515.jpg",
+    "question": "What type of breed are the two birds in the photo?",
+    "gold_answer": "canary or canary or parrot or parrot or parakeet or parakeet or parrots or parrots or cockatoo or cockatoo"
+  },
+  {
+    "sample_id": "sample_0030",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1587985.jpg",
+    "question": "What process is used to make that umbrella green?",
+    "gold_answer": "dye or dye or dye or dye or died or died or coloring or coloring or dying or dying"
+  },
+  {
+    "sample_id": "sample_0031",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4910625.jpg",
+    "question": "What color is the skin of the vegetable used to make these fried sticks?",
+    "gold_answer": "brown or brown or brown or brown or brown or brown or red or red or green or green"
+  },
+  {
+    "sample_id": "sample_0032",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3107705.jpg",
+    "question": "What kind of sandwhich is that?",
+    "gold_answer": "chicken or chicken or chicken or chicken or poboy or poboy or sub or sub or shrimp or shrimp"
+  },
+  {
+    "sample_id": "sample_0033",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/921775.jpg",
+    "question": "How long would it usually take to bake this kind of cake?",
+    "gold_answer": "2 hours or 2 hours or 2 hours or 2 hours or 2 3 hours or 2 3 hours or 50 minutes or 50 minutes or 1 hour or 1 hour"
+  },
+  {
+    "sample_id": "sample_0034",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3956335.jpg",
+    "question": "What kind of boat is this?",
+    "gold_answer": "tug or tug or tug or tug or tug or tug or ship or ship or tugboat or tugboat"
+  },
+  {
+    "sample_id": "sample_0035",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1453255.jpg",
+    "question": "What part of this back does this pillow support?",
+    "gold_answer": "lower or lower or lower or lower or lower or lower or lumbar or lumbar or lumbar or lumbar"
+  },
+  {
+    "sample_id": "sample_0036",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/657365.jpg",
+    "question": "Name the material used to make this ball shown in this picture?",
+    "gold_answer": "felt or felt or felt or felt or rubber or rubber or rubber or rubber or plastic or plastic"
+  },
+  {
+    "sample_id": "sample_0037",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2102305.jpg",
+    "question": "What branch of the military is this woman from?",
+    "gold_answer": "army or army or army or army or navy or navy or navy or navy or marines or marines"
+  },
+  {
+    "sample_id": "sample_0038",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/371495.jpg",
+    "question": "Name the flooring type shown in this picture?",
+    "gold_answer": "hardwood or hardwood or hardwood or hardwood or hardwood or hardwood or wood or wood or wood or wood"
+  },
+  {
+    "sample_id": "sample_0039",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1868735.jpg",
+    "question": "What type of boat is this?",
+    "gold_answer": "canoe or canoe or canoe or canoe or canoe or canoe or canoe or canoe or rowboat or rowboat"
+  },
+  {
+    "sample_id": "sample_0040",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5525075.jpg",
+    "question": "What language is on the sign?",
+    "gold_answer": "russian or russian or russian or russian or russia or russia or iraqi or iraqi or thai or thai"
+  },
+  {
+    "sample_id": "sample_0041",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4447775.jpg",
+    "question": "What do you put inside these bags?",
+    "gold_answer": "books or books or books or books or clothes or clothes or clothes or clothes or belongings or belongings"
+  },
+  {
+    "sample_id": "sample_0042",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4050075.jpg",
+    "question": "What type of trees are growing in this photo?",
+    "gold_answer": "cherry or cherry or cherry or cherry or aporcot or aporcot or cherry blossoms or cherry blossoms or pine or pine"
+  },
+  {
+    "sample_id": "sample_0043",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4271115.jpg",
+    "question": "What kind of craft is pulling the two people?",
+    "gold_answer": "speedboat or speedboat or speedboat or speedboat or speedboat or speedboat or boat or boat or boat or boat"
+  },
+  {
+    "sample_id": "sample_0044",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/24535.jpg",
+    "question": "What reason might one have for sitting here?",
+    "gold_answer": "bored or bored or relax or relax or to rest or to rest or rest or rest or relaxing or relaxing"
+  },
+  {
+    "sample_id": "sample_0045",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1704255.jpg",
+    "question": "What is the reason for piling these appliances up in the parking lot?",
+    "gold_answer": "trash or trash or trash or trash or remodel or remodel or disposal or disposal or for sanitation to pick them up or for sanitation to pick them up"
+  },
+  {
+    "sample_id": "sample_0046",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5081655.jpg",
+    "question": "What type of fuel does this vehicle use?",
+    "gold_answer": "diesel or diesel or diesel or diesel or gasoline or gasoline or gas or gas or petroleum or petroleum"
+  },
+  {
+    "sample_id": "sample_0047",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3999215.jpg",
+    "question": "Why would we suspect that these bears are male and female?",
+    "gold_answer": "kissing or kissing or kissing or kissing or about to mate or about to mate or investigating each other or investigating each other or love or love"
+  },
+  {
+    "sample_id": "sample_0048",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3959755.jpg",
+    "question": "Name the kind of wood stored in this picture?",
+    "gold_answer": "fire or fire or fire or fire or fire or fire or firewood or firewood or pine or pine"
+  },
+  {
+    "sample_id": "sample_0049",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1891525.jpg",
+    "question": "What military branch is she in?",
+    "gold_answer": "army or army or army or army or army or army or marines or marines or national guard or national guard"
+  },
+  {
+    "sample_id": "sample_0050",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/389195.jpg",
+    "question": "These animals are found in what area of the world?",
+    "gold_answer": "north america or north america or north america or north america or usa or usa or arizona or arizona or american west or american west"
+  },
+  {
+    "sample_id": "sample_0051",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5212215.jpg",
+    "question": "What kind of sport is this bike used for?",
+    "gold_answer": "motocross or motocross or motocross or motocross or motocross or motocross or bmx or bmx or motorcross or motorcross"
+  },
+  {
+    "sample_id": "sample_0052",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1547015.jpg",
+    "question": "This furred creature is likely to chase what lover of cheese?",
+    "gold_answer": "mouse or mouse or mouse or mouse or mouse or mouse or mouse or mouse or mouse or mouse"
+  },
+  {
+    "sample_id": "sample_0053",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5098195.jpg",
+    "question": "What type of project do these items need to be used?",
+    "gold_answer": "sewing or sewing or sewing or sewing or tailar or tailar or clothing making or clothing making or clothes alterations or clothes alterations"
+  },
+  {
+    "sample_id": "sample_0054",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1436445.jpg",
+    "question": "Who is this famously named after?",
+    "gold_answer": "teddy roosevelt or teddy roosevelt or teddy roosevelt or teddy roosevelt or president teddy roosevelt or president teddy roosevelt or theodore roosvelt or theodore roosvelt or theodore roosevelt or theodore roosevelt"
+  },
+  {
+    "sample_id": "sample_0055",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1898455.jpg",
+    "question": "What kind of shoes are in this picture?",
+    "gold_answer": "wedges or wedges or wedges or wedges or wedges or wedges or heels or heels or sandal pumps or sandal pumps"
+  },
+  {
+    "sample_id": "sample_0056",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3403865.jpg",
+    "question": "What is parked along the curb?",
+    "gold_answer": "bus or bus or bus or bus or bus or bus or bus or bus or school bus or school bus"
+  },
+  {
+    "sample_id": "sample_0057",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3409225.jpg",
+    "question": "Name the material used to make this sitting bench shown in this picture?",
+    "gold_answer": "granite or granite or granite or granite or marble or marble or camera or camera or concrete or concrete"
+  },
+  {
+    "sample_id": "sample_0058",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5581375.jpg",
+    "question": "Where is this food served?",
+    "gold_answer": "food truck or food truck or food truck or food truck or food truck or food truck or food truck or food truck or streetcar or streetcar"
+  },
+  {
+    "sample_id": "sample_0059",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2428705.jpg",
+    "question": "In what decade was this machine invented?",
+    "gold_answer": "1900 or 1900 or 1900 or 1900 or nineteen twenties or nineteen twenties or 1860 1870 or 1860 1870 or 1930's or 1930's"
+  },
+  {
+    "sample_id": "sample_0060",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1582795.jpg",
+    "question": "What is she making?",
+    "gold_answer": "banana bread or banana bread or banana bread or banana bread or mashed bananas or mashed bananas or mashed bananas or mashed bananas or banana or banana"
+  },
+  {
+    "sample_id": "sample_0061",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1745115.jpg",
+    "question": "Where would you find these items?",
+    "gold_answer": "office or office or office or office or office or office or desk or desk or office or home or office or home"
+  },
+  {
+    "sample_id": "sample_0062",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4547515.jpg",
+    "question": "Which instrument is on the floor?",
+    "gold_answer": "guitar or guitar or guitar or guitar or guitar or guitar or guitar or guitar or guitar or guitar"
+  },
+  {
+    "sample_id": "sample_0063",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2641615.jpg",
+    "question": "Would a male or female use this bag?",
+    "gold_answer": "female or female or female or female or female or female or female or female or female or female"
+  },
+  {
+    "sample_id": "sample_0064",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3316425.jpg",
+    "question": "What kind of food does the restaurant on the sign serve?",
+    "gold_answer": "fast food or fast food or fast food or fast food or burgers or burgers or burgers or burgers or hamburgers or hamburgers"
+  },
+  {
+    "sample_id": "sample_0065",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2725185.jpg",
+    "question": "What are the ropes on their faces called?",
+    "gold_answer": "bridle or bridle or bridle or bridle or harness or harness or harness or harness or reins or reins"
+  },
+  {
+    "sample_id": "sample_0066",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4345095.jpg",
+    "question": "What are these people doing?",
+    "gold_answer": "riding horses or riding horses or riding horses or riding horses or horseback riding or horseback riding or horseback riding or horseback riding or riding or riding"
+  },
+  {
+    "sample_id": "sample_0067",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2895735.jpg",
+    "question": "What is this wedding dress made from?",
+    "gold_answer": "silk or silk or silk or silk or silk or silk or satin or satin or polyester or polyester"
+  },
+  {
+    "sample_id": "sample_0068",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4682775.jpg",
+    "question": "How many burners does this stove top have?",
+    "gold_answer": "4 or 4 or 4 or 4 or 4 or 4 or 4 or 4 or 4 or 4"
+  },
+  {
+    "sample_id": "sample_0069",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3084305.jpg",
+    "question": "What kind of food is this?",
+    "gold_answer": "stir fry or stir fry or stir fry or stir fry or cassorole or cassorole or stirfry or stirfry or vegetarian or vegetarian"
+  },
+  {
+    "sample_id": "sample_0070",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1569285.jpg",
+    "question": "What model is the car?",
+    "gold_answer": "ford or ford or ford or ford or ram or ram or dodge or dodge or dodge ram srt 10 or dodge ram srt 10"
+  },
+  {
+    "sample_id": "sample_0071",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/5289055.jpg",
+    "question": "What mini van is that?",
+    "gold_answer": "honda or honda or honda or honda or volkswagon or volkswagon or chevy or chevy or white or white"
+  },
+  {
+    "sample_id": "sample_0072",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/754795.jpg",
+    "question": "What kind of climate do you typically find these?",
+    "gold_answer": "desert or desert or desert or desert or hot or hot or arrid or arrid or hot arrid or hot arrid"
+  },
+  {
+    "sample_id": "sample_0073",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2556315.jpg",
+    "question": "Which serial killer operated an establishment such as this?",
+    "gold_answer": "norman bates or norman bates or norman bates or norman bates or physcopath or physcopath or bundy or bundy or craiglist or craiglist"
+  },
+  {
+    "sample_id": "sample_0074",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/30015.jpg",
+    "question": "What are these pastries made of?",
+    "gold_answer": "dough or dough or dough or dough or dough or dough or flour or flour or sugar dough flavoring or sugar dough flavoring"
+  },
+  {
+    "sample_id": "sample_0075",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/295965.jpg",
+    "question": "Does this look more like a home or a hotel?",
+    "gold_answer": "hotel or hotel or hotel or hotel or hotel or hotel or hotel or hotel or hotel or hotel"
+  },
+  {
+    "sample_id": "sample_0076",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3446545.jpg",
+    "question": "Why animal is this artifact modeled on?",
+    "gold_answer": "elephant or elephant or elephant or elephant or elephant or elephant or elephant or elephant or elephant or elephant"
+  },
+  {
+    "sample_id": "sample_0077",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1758645.jpg",
+    "question": "What kind of chair is the tennis player sitting in?",
+    "gold_answer": "folding or folding or folding or folding or lawn or lawn or directors or directors or folding chair or folding chair"
+  },
+  {
+    "sample_id": "sample_0078",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2763235.jpg",
+    "question": "When was this type of vehicle created?",
+    "gold_answer": "1885 or 1885 or 1885 or 1885 or 1885 or 1885 or 1920 or 1920 or 1900 or 1900"
+  },
+  {
+    "sample_id": "sample_0079",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2980675.jpg",
+    "question": "What is the name of the beer?",
+    "gold_answer": "kingfish or kingfish or kingfish or kingfish or kingfish or kingfish or kingfish or kingfish or kingfisher or kingfisher"
+  },
+  {
+    "sample_id": "sample_0080",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4104935.jpg",
+    "question": "In which us states are these fruits commonly grown?",
+    "gold_answer": "florida or florida or florida or florida or florida or florida or florida or florida or florida and california or florida and california"
+  },
+  {
+    "sample_id": "sample_0081",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4927855.jpg",
+    "question": "Why is this food on that type of paper?",
+    "gold_answer": "sandwich or sandwich or sandwich or sandwich or sandwich or sandwich or take out or take out or fast food or fast food"
+  },
+  {
+    "sample_id": "sample_0082",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1623665.jpg",
+    "question": "What does the blue p represent?",
+    "gold_answer": "pay here or pay here or pay here or pay here or parking or parking or parking or parking or pay or pay"
+  },
+  {
+    "sample_id": "sample_0083",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/676085.jpg",
+    "question": "Who rides in this?",
+    "gold_answer": "passengers or passengers or passengers or passengers or pilot or pilot or people or people or passangers or passangers"
+  },
+  {
+    "sample_id": "sample_0084",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2480875.jpg",
+    "question": "What country is this bus in?",
+    "gold_answer": "india or india or india or india or mexico or mexico or tailand or tailand or uk or uk"
+  },
+  {
+    "sample_id": "sample_0085",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4112775.jpg",
+    "question": "Who invented these items?",
+    "gold_answer": "bill gates or bill gates or bill gates or bill gates or charles babbage or charles babbage or osborne or osborne or adam osborne or adam osborne"
+  },
+  {
+    "sample_id": "sample_0086",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2432605.jpg",
+    "question": "What kind of cell phone does this person have?",
+    "gold_answer": "nokia or nokia or nokia or nokia or mobile or mobile or flip or flip or iphone or iphone"
+  },
+  {
+    "sample_id": "sample_0087",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3443085.jpg",
+    "question": "What building might this be found in?",
+    "gold_answer": "hotel or hotel or hotel or hotel or hotel or hotel or hotel or hotel or house or house"
+  },
+  {
+    "sample_id": "sample_0088",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4563775.jpg",
+    "question": "What kind of recipes could one make with this?",
+    "gold_answer": "salad or salad or salad or salad or salad or salad or salads or salads or brussel sprouts or brussel sprouts"
+  },
+  {
+    "sample_id": "sample_0089",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4075245.jpg",
+    "question": "What is the plate made out of?",
+    "gold_answer": "ceramic or ceramic or ceramic or ceramic or porcelain or porcelain or glass or glass or china or china"
+  },
+  {
+    "sample_id": "sample_0090",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2040595.jpg",
+    "question": "Is this fresh water or salt water?",
+    "gold_answer": "fresh or fresh or fresh or fresh or fresh or fresh or fresh or fresh or fresh or fresh"
+  },
+  {
+    "sample_id": "sample_0091",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1686835.jpg",
+    "question": "Which item shown here is a compound word derived from the name of the human cranium and the telephone?",
+    "gold_answer": "headphone or headphone or headphone or headphone or headset or headset or computer or computer or headphones or headphones"
+  },
+  {
+    "sample_id": "sample_0092",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1984165.jpg",
+    "question": "How were these two photos combined into one image?",
+    "gold_answer": "photoshop or photoshop or photoshop or photoshop or photoshop or photoshop or photo program or photo program or sitting next to each other or sitting next to each other"
+  },
+  {
+    "sample_id": "sample_0093",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/3515305.jpg",
+    "question": "What do people do in these brown objects?",
+    "gold_answer": "sit or sit or sit or sit or sit or sit or sit or sit or sit down or sit down"
+  },
+  {
+    "sample_id": "sample_0094",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/4936825.jpg",
+    "question": "Which direction would i turn to drive to go to casper?",
+    "gold_answer": "left or left or left or left or left or left or left or left or left or left"
+  },
+  {
+    "sample_id": "sample_0095",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1521205.jpg",
+    "question": "What are his tires made out of?",
+    "gold_answer": "rubber or rubber or rubber or rubber or rubber or rubber or rubber or rubber or rubber or rubber"
+  },
+  {
+    "sample_id": "sample_0096",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/1814035.jpg",
+    "question": "What kind of material are these short made from?",
+    "gold_answer": "denim or denim or denim or denim or denim or denim or denim or denim or cotton or cotton"
+  },
+  {
+    "sample_id": "sample_0097",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2857995.jpg",
+    "question": "What item is the woman in this photo pulling her luggage on?",
+    "gold_answer": "sled or sled or sled or sled or sled or sled or sligh or sligh or sleigh or sleigh"
+  },
+  {
+    "sample_id": "sample_0098",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/922445.jpg",
+    "question": "Does this look more like chuckie or the characters from the dark crystal?",
+    "gold_answer": "dark crystal or dark crystal or dark crystal or dark crystal or dark crystal or dark crystal or chuckie or chuckie or chuckie or chuckie"
+  },
+  {
+    "sample_id": "sample_0099",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/653065.jpg",
+    "question": "This type of transportation is used primarily for what purpose?",
+    "gold_answer": "traveling or traveling or commuting or commuting or commuters or commuters or public or public or passangers or passangers"
+  },
+  {
+    "sample_id": "sample_0100",
+    "image_path": "src/vlm_kg_physical_reasoning/data/okvqa/images/2913305.jpg",
+    "question": "How long is this animal's neck?",
+    "gold_answer": "6 feet or 6 feet or 6 feet or 6 feet or 6 ft or 6 ft or 6ft or 6ft or 7 feet or 7 feet"
+  }
+]
